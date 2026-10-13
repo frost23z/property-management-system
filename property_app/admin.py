@@ -21,6 +21,31 @@ class AmenityAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}  # noqa: RUF012
 
 
+class PriceRangeFilter(admin.SimpleListFilter):
+    title = "price range"
+    parameter_name = "price_range"
+    # key -> (label, min price inclusive, max price exclusive)
+    RANGES = {  # noqa: RUF012
+        "budget": ("Under 4,000", None, 4000),
+        "mid": ("4,000 - 5,999", 4000, 6000),
+        "upper": ("6,000 - 7,999", 6000, 8000),
+        "premium": ("8,000 and above", 8000, None),
+    }
+
+    def lookups(self, request, model_admin):
+        return [(key, label) for key, (label, _, _) in self.RANGES.items()]
+
+    def queryset(self, request, queryset):
+        if self.value() not in self.RANGES:
+            return queryset
+        _, low, high = self.RANGES[self.value()]
+        if low is not None:
+            queryset = queryset.filter(price__gte=low)
+        if high is not None:
+            queryset = queryset.filter(price__lt=high)
+        return queryset
+
+
 class PropertyImageInline(admin.TabularInline):
     model = PropertyImage
     extra = 1
@@ -53,6 +78,7 @@ class PropertyAdmin(GISModelAdmin):
         "is_active",
     )
     list_filter = (
+        PriceRangeFilter,
         "status",
         "property_type",
         "is_featured",
