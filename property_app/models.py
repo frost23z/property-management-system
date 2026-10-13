@@ -28,6 +28,11 @@ class Location(models.Model):
         ]
 
 
+class Amenity(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(unique=True)
+
+
 class Property(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="properties")
     title = models.CharField(max_length=255)
@@ -40,6 +45,7 @@ class Property(models.Model):
     bathrooms = models.PositiveSmallIntegerField(default=0)
     area_sqft = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     address = models.TextField(blank=True)
+    amenities = models.ManyToManyField(Amenity, related_name="properties", blank=True)
     point = models.PointField(geography=True, srid=4326, null=True, blank=True)
     footprint = models.PolygonField(srid=4326, null=True, blank=True)
     embedding = VectorField(dimensions=1536, null=True, blank=True)
