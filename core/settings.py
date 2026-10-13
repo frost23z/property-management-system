@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "pgvector.django",
     "db_config",
+    "property_app",
 ]
 
 MIDDLEWARE = [
