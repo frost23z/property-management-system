@@ -17,6 +17,7 @@ class Location(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ["name"]  # noqa: RUF012
         indexes = [  # noqa: RUF012
             HnswIndex(
                 name="location_embedding_idx",
@@ -31,6 +32,10 @@ class Location(models.Model):
 class Amenity(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
+
+    class Meta:
+        ordering = ["name"]  ## noqa: RUF012
+        verbose_name_plural = "amenities"
 
 
 class Property(models.Model):
