@@ -28,6 +28,9 @@ class Location(models.Model):
             )
         ]
 
+    def __str__(self):
+        return self.name
+
 
 class Amenity(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -36,6 +39,9 @@ class Amenity(models.Model):
     class Meta:
         ordering = ["name"]  ## noqa: RUF012
         verbose_name_plural = "amenities"
+
+    def __str__(self):
+        return self.name
 
 
 class Property(models.Model):
@@ -60,6 +66,8 @@ class Property(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ["title"]  # noqa: RUF012
+        verbose_name_plural = "properties"
         indexes = [  # noqa: RUF012
             HnswIndex(
                 name="property_embedding_idx",
@@ -69,6 +77,9 @@ class Property(models.Model):
                 opclasses=["vector_cosine_ops"],
             )
         ]
+
+    def __str__(self):
+        return self.title
 
 
 class PropertyImage(models.Model):
