@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-from pgvector.django import VectorField
+from pgvector.django import HnswIndex, VectorField
 
 
 class Location(models.Model):
@@ -15,6 +15,17 @@ class Location(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [  # noqa: RUF012
+            HnswIndex(
+                name="location_embedding_idx",
+                fields=["embedding"],
+                m=16,
+                ef_construction=64,
+                opclasses=["vector_cosine_ops"],
+            )
+        ]
 
 
 class Property(models.Model):
@@ -37,6 +48,17 @@ class Property(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        indexes = [  # noqa: RUF012
+            HnswIndex(
+                name="property_embedding_idx",
+                fields=["embedding"],
+                m=16,
+                ef_construction=64,
+                opclasses=["vector_cosine_ops"],
+            )
+        ]
+
 
 class PropertyImage(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="images")
@@ -50,3 +72,14 @@ class PropertyImage(models.Model):
     is_primary = models.BooleanField(default=False)
     sort_order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [  # noqa: RUF012
+            HnswIndex(
+                name="property_image_embedding_idx",
+                fields=["embedding"],
+                m=16,
+                ef_construction=64,
+                opclasses=["vector_cosine_ops"],
+            )
+        ]
