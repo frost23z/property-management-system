@@ -1,0 +1,47 @@
+name,slug,country,state,city,address,latitude,longitude
+"Cox's Bazar, Chattogram, Bangladesh",cox-s-bazar,Bangladesh,Chattogram,Cox's Bazar,"Cox's Bazar, Cox's Bazar District, Chattogram Division, Bangladesh",21.4272,91.979
+"Inani Beach, Chattogram, Bangladesh",inani-beach,Bangladesh,Chattogram,Inani Beach,"Inani Beach, Cox's Bazar District, Chattogram Division, Bangladesh",21.253,92.041
+"Himchari, Chattogram, Bangladesh",himchari,Bangladesh,Chattogram,Himchari,"Himchari, Cox's Bazar District, Chattogram Division, Bangladesh",21.37,91.978
+"Teknaf, Chattogram, Bangladesh",teknaf,Bangladesh,Chattogram,Teknaf,"Teknaf, Cox's Bazar District, Chattogram Division, Bangladesh",20.86,92.3
+"Saint Martin's Island, Chattogram, Bangladesh",saint-martin-s-island,Bangladesh,Chattogram,Saint Martin's Island,"Saint Martin's Island, Cox's Bazar District, Chattogram Division, Bangladesh",20.627,92.323
+"Sajek Valley, Chattogram, Bangladesh",sajek-valley,Bangladesh,Chattogram,Sajek Valley,"Sajek Valley, Rangamati District, Chattogram Division, Bangladesh",23.382,92.294
+"Rangamati, Chattogram, Bangladesh",rangamati,Bangladesh,Chattogram,Rangamati,"Rangamati, Rangamati District, Chattogram Division, Bangladesh",22.6533,92.175
+"Kaptai, Chattogram, Bangladesh",kaptai,Bangladesh,Chattogram,Kaptai,"Kaptai, Rangamati District, Chattogram Division, Bangladesh",22.5,92.2167
+"Bandarban, Chattogram, Bangladesh",bandarban,Bangladesh,Chattogram,Bandarban,"Bandarban, Bandarban District, Chattogram Division, Bangladesh",22.1953,92.2184
+"Khagrachhari, Chattogram, Bangladesh",khagrachhari,Bangladesh,Chattogram,Khagrachhari,"Khagrachhari, Khagrachhari District, Chattogram Division, Bangladesh",23.1193,91.9847
+"Chattogram (Patenga), Chattogram, Bangladesh",chattogram-patenga,Bangladesh,Chattogram,Chattogram (Patenga),"Chattogram (Patenga), Chattogram District, Chattogram Division, Bangladesh",22.236,91.797
+"Chattogram City, Chattogram, Bangladesh",chattogram-city,Bangladesh,Chattogram,Chattogram City,"Chattogram City, Chattogram District, Chattogram Division, Bangladesh",22.3569,91.7832
+"Mainamati, Cumilla, Chattogram, Bangladesh",mainamati-cumilla,Bangladesh,Chattogram,"Mainamati, Cumilla","Mainamati, Cumilla, Cumilla District, Chattogram Division, Bangladesh",23.425,91.137
+"Sylhet, Sylhet, Bangladesh",sylhet,Bangladesh,Sylhet,Sylhet,"Sylhet, Sylhet District, Sylhet Division, Bangladesh",24.8949,91.8687
+"Sreemangal, Sylhet, Bangladesh",sreemangal,Bangladesh,Sylhet,Sreemangal,"Sreemangal, Moulvibazar District, Sylhet Division, Bangladesh",24.3065,91.7296
+"Lawachara, Sylhet, Bangladesh",lawachara,Bangladesh,Sylhet,Lawachara,"Lawachara, Moulvibazar District, Sylhet Division, Bangladesh",24.322,91.786
+"Jaflong, Sylhet, Bangladesh",jaflong,Bangladesh,Sylhet,Jaflong,"Jaflong, Sylhet District, Sylhet Division, Bangladesh",25.162,92.019
+"Ratargul, Sylhet, Bangladesh",ratargul,Bangladesh,Sylhet,Ratargul,"Ratargul, Sylhet District, Sylhet Division, Bangladesh",25.005,91.949
+"Lalakhal, Sylhet, Bangladesh",lalakhal,Bangladesh,Sylhet,Lalakhal,"Lalakhal, Sylhet District, Sylhet Division, Bangladesh",25.006,92.008
+"Kuakata, Barishal, Bangladesh",kuakata,Bangladesh,Barishal,Kuakata,"Kuakata, Patuakhali District, Barishal Division, Bangladesh",21.8167,90.1167
+"Sundarbans (Mongla), Khulna, Bangladesh",sundarbans-mongla,Bangladesh,Khulna,Sundarbans (Mongla),"Sundarbans (Mongla), Bagerhat District, Khulna Division, Bangladesh",22.475,89.604
+"Bagerhat, Khulna, Bangladesh",bagerhat,Bangladesh,Khulna,Bagerhat,"Bagerhat, Bagerhat District, Khulna Division, Bangladesh",22.6742,89.742
+"Old Dhaka, Dhaka, Bangladesh",old-dhaka,Bangladesh,Dhaka,Old Dhaka,"Old Dhaka, Dhaka District, Dhaka Division, Bangladesh",23.7189,90.388
+"Dhaka (Gulshan–Banani), Dhaka, Bangladesh",dhaka-gulshan-banani,Bangladesh,Dhaka,Dhaka (Gulshan–Banani),"Dhaka (Gulshan–Banani), Dhaka District, Dhaka Division, Bangladesh",23.7937,90.4066
+"Sonargaon, Dhaka, Bangladesh",sonargaon,Bangladesh,Dhaka,Sonargaon,"Sonargaon, Narayanganj District, Dhaka Division, Bangladesh",23.65,90.597
+"Paharpur, Rajshahi, Bangladesh",paharpur,Bangladesh,Rajshahi,Paharpur,"Paharpur, Naogaon District, Rajshahi Division, Bangladesh",25.031,88.977
+"Mahasthangarh, Bogura, Rajshahi, Bangladesh",mahasthangarh-bogura,Bangladesh,Rajshahi,"Mahasthangarh, Bogura","Mahasthangarh, Bogura, Bogura District, Rajshahi Division, Bangladesh",24.965,89.349
+"Puthia, Rajshahi, Bangladesh",puthia,Bangladesh,Rajshahi,Puthia,"Puthia, Rajshahi District, Rajshahi Division, Bangladesh",24.365,88.833
+"Barishal, Barishal, Bangladesh",barishal,Bangladesh,Barishal,Barishal,"Barishal, Barishal District, Barishal Division, Bangladesh",22.70497,90.37013
+"Mymensingh, Mymensingh, Bangladesh",mymensingh,Bangladesh,Mymensingh,Mymensingh,"Mymensingh, Mymensingh District, Mymensingh Division, Bangladesh",24.75636,90.40646
+"Rajshahi, Rajshahi, Bangladesh",rajshahi,Bangladesh,Rajshahi,Rajshahi,"Rajshahi, Rajshahi District, Rajshahi Division, Bangladesh",24.374,88.60114
+"Rangpur, Rangpur, Bangladesh",rangpur,Bangladesh,Rangpur,Rangpur,"Rangpur, Rangpur District, Rangpur Division, Bangladesh",25.74664,89.25166
+"Khulna, Khulna, Bangladesh",khulna,Bangladesh,Khulna,Khulna,"Khulna, Khulna District, Khulna Division, Bangladesh",22.80979,89.56439
+"Moulvibazar, Sylhet, Bangladesh",moulvibazar,Bangladesh,Sylhet,Moulvibazar,"Moulvibazar, Moulvibazar District, Sylhet Division, Bangladesh",24.48888,91.77075
+"Habiganj, Sylhet, Bangladesh",habiganj,Bangladesh,Sylhet,Habiganj,"Habiganj, Habiganj District, Sylhet Division, Bangladesh",24.38044,91.41299
+"Natore, Rajshahi, Bangladesh",natore,Bangladesh,Rajshahi,Natore,"Natore, Natore District, Rajshahi Division, Bangladesh",24.41112,88.98673
+"Dinajpur, Rangpur, Bangladesh",dinajpur,Bangladesh,Rangpur,Dinajpur,"Dinajpur, Dinajpur District, Rangpur Division, Bangladesh",25.62745,88.63779
+"Cumilla, Chattogram, Bangladesh",cumilla,Bangladesh,Chattogram,Cumilla,"Cumilla, Cumilla District, Chattogram Division, Bangladesh",23.46186,91.18503
+"Kushtia, Khulna, Bangladesh",kushtia,Bangladesh,Khulna,Kushtia,"Kushtia, Kushtia District, Khulna Division, Bangladesh",23.9028,89.11943
+"Jashore, Khulna, Bangladesh",jashore,Bangladesh,Khulna,Jashore,"Jashore, Jashore District, Khulna Division, Bangladesh",23.16971,89.21371
+"Sunamganj, Sylhet, Bangladesh",sunamganj,Bangladesh,Sylhet,Sunamganj,"Sunamganj, Sunamganj District, Sylhet Division, Bangladesh",25.06889,91.40243
+"Bhola, Barishal, Bangladesh",bhola,Bangladesh,Barishal,Bhola,"Bhola, Bhola District, Barishal Division, Bangladesh",22.68759,90.64403
+"Maheshkhali Island, Chattogram, Bangladesh",maheshkhali-island,Bangladesh,Chattogram,Maheshkhali Island,"Maheshkhali Island, Cox's Bazar District, Chattogram Division, Bangladesh",21.55,91.95
+"Ramu, Chattogram, Bangladesh",ramu,Bangladesh,Chattogram,Ramu,"Ramu, Cox's Bazar District, Chattogram Division, Bangladesh",21.4167,92.0833
+"Sitakunda, Chattogram, Bangladesh",sitakunda,Bangladesh,Chattogram,Sitakunda,"Sitakunda, Chattogram District, Chattogram Division, Bangladesh",22.6167,91.6667
+"Madhupur, Dhaka, Bangladesh",madhupur,Bangladesh,Dhaka,Madhupur,"Madhupur, Tangail District, Dhaka Division, Bangladesh",24.6167,90.0333
