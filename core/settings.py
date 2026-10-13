@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",
     "rest_framework",
     "pgvector.django",
+    "db_config",
 ]
 
 MIDDLEWARE = [
