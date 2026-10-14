@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{% if location %}Stays in {{ location.city }}{% else %}Browse stays{% endif %} - BD Stays{% endblock %}
+
+{% block content %}
+<section class="listing-header">
+  <div class="container">
+    {% include "partials/search_form.html" with css_class="search-form--compact" %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% if form.is_bound and form.is_valid %}
+      <h1 class="listing__title">
+        {% if location %}Stays in {{ location.city }}{% else %}No stays found{% endif %}
+      </h1>
+    {% elif not form.is_bound %}
+      <h1 class="listing__title">All stays</h1>
+    {% endif %}
+
+    {% if properties %}
+      <p class="listing__count">{{ properties|length }} propert{{ properties|length|pluralize:"y,ies" }}</p>
+      <div class="card-grid">
+        {% for property in properties %}
+          {% include "partials/property_card.html" %}
+        {% endfor %}
+      </div>
+    {% elif form.is_valid %}
+      <p class="empty-state">We couldn't find any stays matching &ldquo;{{ form.cleaned_data.location }}&rdquo;.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

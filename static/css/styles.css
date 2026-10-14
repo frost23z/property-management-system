@@ -358,3 +358,42 @@ select:focus {
 .destination__label small {
   opacity: 0.9;
 }
+
+/* ==========================================================================
+   Listing page
+   ========================================================================== */
+.listing-header {
+  padding: 1.25rem 0;
+  background: var(--color-bg-soft);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.search-form--compact {
+  max-width: none;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--color-border);
+}
+
+.form-error {
+  margin: 0.5rem 0 0;
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
+.listing__title {
+  font-size: 1.7rem;
+  margin-bottom: 0.25rem;
+}
+
+.listing__count {
+  margin: 0 0 1.25rem;
+  color: var(--color-muted);
+}
+
+.empty-state {
+  padding: 2rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-muted);
+  text-align: center;
+}

@@ -1,7 +1,7 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 
 from .forms import PropertySearchForm
+from .search import resolve_location, search_properties
 from .selectors import popular_locations, public_properties
 
 
@@ -16,5 +16,17 @@ def home(request):
 
 
 def property_list(request):
-    # placeholder: replaced by the real listing page in the next commits
-    return HttpResponse("Search results coming soon")
+    """Browse all stays, or search them by location when a query is given."""
+    # only a submitted search binds the form; a bare ?page=2 must still browse all stays
+    form = PropertySearchForm(request.GET if "location" in request.GET else None)
+    location = None
+    if not form.is_bound:
+        properties = public_properties().order_by("title")
+    elif form.is_valid():
+        location = resolve_location(form.cleaned_data["location"])
+        properties = search_properties(location)
+    else:
+        properties = public_properties().none()
+
+    context = {"form": form, "location": location, "properties": properties}
+    return render(request, "property_list.html", context)
