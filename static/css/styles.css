@@ -134,3 +134,88 @@ h3 {
 .btn:hover {
   background: var(--color-primary-dark);
 }
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+input[type="text"],
+select {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+  font: inherit;
+  color: var(--color-text);
+  background: #fff;
+}
+
+input[type="text"]:focus,
+select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+/* ==========================================================================
+   Home: hero + search form
+   ========================================================================== */
+.hero {
+  padding: 5rem 0 6rem;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(135deg, #0b6e4f 0%, #138a72 55%, #1b9aaa 100%);
+}
+
+.hero__title {
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  margin-bottom: 0.5rem;
+}
+
+.hero__subtitle {
+  margin: 0 0 2rem;
+  font-size: 1.1rem;
+  opacity: 0.92;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0.5rem;
+  background: #fff;
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.search-form input[type="text"] {
+  border: 0;
+}
+
+.search-form input[type="text"]:focus {
+  outline: 0;
+}
+
+.search-form__submit {
+  flex-shrink: 0;
+  background: var(--color-accent);
+  color: #3b2410;
+}
+
+.search-form__submit:hover {
+  background: #e98f43;
+}
+
+@media (max-width: 540px) {
+  .search-form {
+    flex-direction: column;
+  }
+}

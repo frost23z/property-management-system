@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-  <h1>Hello, World!</h1>
-</div>
+<section class="hero">
+  <div class="container">
+    <h1 class="hero__title">Find your perfect getaway in Bangladesh</h1>
+    <p class="hero__subtitle">Beach cottages, hill retreats, tea estate bungalows and more.</p>
+
+    <form class="search-form" method="get" action="{% url 'property_app:property_list' %}">
+      <label class="sr-only" for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
+      {{ form.location }}
+      <button class="btn search-form__submit" type="submit">Search</button>
+    </form>
+  </div>
+</section>
 {% endblock %}
