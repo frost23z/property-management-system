@@ -10,6 +10,7 @@ class PropertySearchForm(forms.Form):
             attrs={
                 "placeholder": "Search a city or destination, e.g. Cox's Bazar",
                 "autocomplete": "off",
+                "list": "location-options",
             }
         ),
         error_messages={"required": "Please enter a destination to search."},

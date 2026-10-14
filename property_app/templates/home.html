@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load property_tags %}
 
 {% block content %}
 <section class="hero">
@@ -9,6 +10,7 @@
     <form class="search-form" method="get" action="{% url 'property_app:property_list' %}">
       <label class="sr-only" for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
       {{ form.location }}
+      {% location_datalist %}
       <button class="btn search-form__submit" type="submit">Search</button>
     </form>
   </div>
