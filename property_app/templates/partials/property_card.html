@@ -1,0 +1,23 @@
+{% load humanize %}
+<article class="card">
+  <div class="card__media">
+    {% with cover=property.gallery.0 %}
+      {% if cover %}
+        <img src="{{ cover.image.url }}" alt="{{ cover.alt_text|default:property.title }}" loading="lazy">
+      {% else %}
+        <div class="card__placeholder">No photo</div>
+      {% endif %}
+    {% endwith %}
+    <span class="card__badge">{{ property.property_type }}</span>
+  </div>
+  <div class="card__body">
+    <p class="card__location">{{ property.location.city }}, {{ property.location.state }}</p>
+    <h3 class="card__title">{{ property.title }}</h3>
+    <p class="card__facts">
+      {{ property.bedrooms }} bed{{ property.bedrooms|pluralize }} &middot;
+      {{ property.bathrooms }} bath{{ property.bathrooms|pluralize }}
+      {% if property.area_sqft %}&middot; {{ property.area_sqft|floatformat:0|intcomma }} sq ft{% endif %}
+    </p>
+    <p class="card__price"><strong>&#2547;{{ property.price|floatformat:0|intcomma }}</strong> <span>/ night</span></p>
+  </div>
+</article>

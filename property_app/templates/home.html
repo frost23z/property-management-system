@@ -15,4 +15,17 @@
     </form>
   </div>
 </section>
+
+{% if featured_properties %}
+<section class="section">
+  <div class="container">
+    <h2 class="section__title">Featured stays</h2>
+    <div class="card-grid">
+      {% for property in featured_properties %}
+        {% include "partials/property_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
 {% endblock %}
