@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load humanize static %}
+
+{% block title %}{{ property.title }} - BD Stays{% endblock %}
+{% block meta_description %}{{ property.title }} in {{ property.location.city }}, {{ property.location.state }}.{% endblock %}
+
+{% block content %}
+<div class="container detail">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'property_app:home' %}">Home</a>
+    <span>/</span>
+    <a href="{% url 'property_app:property_list' %}?location={{ property.location.name|urlencode }}">Stays in {{ property.location.city }}</a>
+    <span>/</span>
+    <span aria-current="page">{{ property.title }}</span>
+  </nav>
+
+  <header class="detail__header">
+    <h1 class="detail__title">{{ property.title }}</h1>
+    <p class="detail__location">{{ property.address|default:property.location.name }}</p>
+    {% if property.distance_to_city is not None %}
+      <p class="detail__distance">{{ property.distance_to_city.km|floatformat:1 }} km from {{ property.location.city }} city center</p>
+    {% endif %}
+  </header>
+
+  {% if property.gallery %}
+    <section class="gallery" data-gallery aria-label="Photos">
+      <div class="gallery__main">
+        <img data-gallery-main src="{{ property.gallery.0.image.url }}" alt="{{ property.gallery.0.alt_text|default:property.title }}">
+      </div>
+      {% if property.gallery|length > 1 %}
+        <ul class="gallery__thumbs">
+          {% for image in property.gallery %}
+            <li>
+              <a data-gallery-thumb class="gallery__thumb{% if forloop.first %} is-active{% endif %}"
+                 href="{{ image.image.url }}" data-alt="{{ image.alt_text|default:property.title }}"
+                 aria-label="Show photo {{ forloop.counter }} of {{ property.gallery|length }}">
+                <img src="{{ image.image.url }}" alt="" loading="lazy">
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  <div class="detail__layout">
+    <div class="detail__main">
+      <ul class="facts">
+        <li><strong>{{ property.property_type }}</strong><span>Type</span></li>
+        <li><strong>{{ property.bedrooms }}</strong><span>Bedroom{{ property.bedrooms|pluralize }}</span></li>
+        <li><strong>{{ property.bathrooms }}</strong><span>Bathroom{{ property.bathrooms|pluralize }}</span></li>
+        {% if property.area_sqft %}
+          <li><strong>{{ property.area_sqft|floatformat:0|intcomma }}</strong><span>sq ft</span></li>
+        {% endif %}
+      </ul>
+
+      <section class="detail__section">
+        <h2>About this stay</h2>
+        {{ property.description|linebreaks }}
+      </section>
+
+      {% with amenities=property.amenities.all %}
+        {% if amenities %}
+          <section class="detail__section">
+            <h2>Amenities</h2>
+            <ul class="amenities">
+              {% for amenity in amenities %}
+                <li>{{ amenity.name }}</li>
+              {% endfor %}
+            </ul>
+          </section>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <aside class="detail__aside">
+      <div class="price-card">
+        <p class="price-card__price"><strong>&#2547;{{ property.price|floatformat:0|intcomma }}</strong> <span>/ night</span></p>
+        <p class="price-card__status">{{ property.status|capfirst }}</p>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/gallery.js' %}" defer></script>
+{% endblock %}

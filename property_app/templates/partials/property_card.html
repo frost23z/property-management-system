@@ -12,7 +12,9 @@
   </div>
   <div class="card__body">
     <p class="card__location">{{ property.location.city }}, {{ property.location.state }}</p>
-    <h3 class="card__title">{{ property.title }}</h3>
+    <h3 class="card__title">
+      <a class="card__link" href="{% url 'property_app:property_detail' slug=property.slug %}">{{ property.title }}</a>
+    </h3>
     {% if origin and property.distance is not None %}
       <p class="card__distance">{{ property.distance.km|floatformat:1 }} km from {{ origin }}</p>
     {% endif %}

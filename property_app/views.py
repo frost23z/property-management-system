@@ -1,5 +1,7 @@
+from django.contrib.gis.db.models.functions import Distance
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.db.models import F
+from django.shortcuts import get_object_or_404, render
 
 from .forms import PropertySearchForm
 from .search import (
@@ -59,3 +61,14 @@ def property_list(request):
         "radius_search": location is not None and location.rank != RANK_BROAD,
     }
     return render(request, "property_list.html", context)
+
+
+def property_detail(request, slug):
+    stays = (
+        public_properties()
+        .prefetch_related("amenities")
+        # straight-line distance from the property to the centre of its city
+        .annotate(distance_to_city=Distance("point", F("location__point")))
+    )
+    stay = get_object_or_404(stays, slug=slug)
+    return render(request, "property_detail.html", {"property": stay})
