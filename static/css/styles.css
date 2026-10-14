@@ -1,0 +1,136 @@
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
+:root {
+  --color-primary: #0b6e4f;
+  --color-primary-dark: #08523b;
+  --color-accent: #f4a261;
+  --color-text: #1f2933;
+  --color-muted: #667085;
+  --color-border: #e4e7ec;
+  --color-bg: #ffffff;
+  --color-bg-soft: #f6f8f7;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgb(16 24 40 / 10%), 0 1px 2px rgb(16 24 40 / 6%);
+  --shadow-lg: 0 12px 28px rgb(16 24 40 / 14%);
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.5;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+.container {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ==========================================================================
+   Layout: header, main, footer
+   ========================================================================== */
+.site-header {
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.brand {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.brand span {
+  color: var(--color-primary);
+}
+
+.site-nav a {
+  margin-left: 1.25rem;
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.site-nav a:hover {
+  color: var(--color-primary);
+}
+
+.site-main {
+  flex: 1;
+}
+
+.site-footer {
+  background: var(--color-bg-soft);
+  border-top: 1px solid var(--color-border);
+  padding: 1.5rem 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn {
+  display: inline-block;
+  border: 0;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--color-primary-dark);
+}

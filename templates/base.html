@@ -1,0 +1,33 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}BD Stays - Vacation rentals in Bangladesh{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Find and book vacation rentals across Bangladesh.{% endblock %}">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/">BD<span>Stays</span></a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; {% now "Y" %} BD Stays. Vacation rentals across Bangladesh.</p>
+    </div>
+  </footer>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
