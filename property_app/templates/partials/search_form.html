@@ -3,8 +3,15 @@
   <label class="sr-only" for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
   {{ form.location }}
   {% location_datalist %}
+  {% if show_radius %}
+    <label class="sr-only" for="{{ form.radius.id_for_label }}">{{ form.radius.label }}</label>
+    {{ form.radius }}
+  {% endif %}
   <button class="btn search-form__submit" type="submit">Search</button>
 </form>
-{% if form.location.errors %}
-  <p class="form-error" role="alert">{{ form.location.errors.0 }}</p>
-{% endif %}
+{% for error in form.location.errors %}
+  <p class="form-error" role="alert">{{ error }}</p>
+{% endfor %}
+{% for error in form.radius.errors %}
+  <p class="form-error" role="alert">{{ error }}</p>
+{% endfor %}

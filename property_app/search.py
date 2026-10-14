@@ -1,4 +1,6 @@
-from django.db.models import Case, IntegerField, Q, Value, When
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.measure import D
+from django.db.models import Case, F, IntegerField, Q, Value, When
 from django.db.models.functions import Length
 
 from .models import Location
@@ -9,6 +11,18 @@ RANK_EXACT = 0  # whole name or city equals the text
 RANK_PREFIX = 1  # city or name starts with the text
 RANK_CITY = 2  # city contains the text
 RANK_BROAD = 3  # only the state, country or full name contains it ("Bangladesh")
+
+RADIUS_CHOICES_KM = (5, 10, 25, 50, 100)
+DEFAULT_RADIUS_KM = 25
+
+
+def _matches(text):
+    return (
+        Q(name__icontains=text)
+        | Q(city__icontains=text)
+        | Q(state__icontains=text)
+        | Q(country__icontains=text)
+    )
 
 
 def resolve_location(text):
@@ -23,12 +37,7 @@ def resolve_location(text):
         return None
     return (
         Location.objects.filter(is_active=True)
-        .filter(
-            Q(name__icontains=text)
-            | Q(city__icontains=text)
-            | Q(state__icontains=text)
-            | Q(country__icontains=text)
-        )
+        .filter(_matches(text))
         .annotate(
             rank=Case(
                 When(Q(name__iexact=text) | Q(city__iexact=text), then=Value(RANK_EXACT)),
@@ -45,8 +54,29 @@ def resolve_location(text):
     )
 
 
-def search_properties(location):
-    """Active properties for a resolved location (None means no match)."""
+def search_properties(location, text="", radius_km=DEFAULT_RADIUS_KM):
+    """Active properties for a resolved location (None means no match).
+
+    * A specific place: every property within ``radius_km`` of the place's centre (PostGIS
+      ``ST_DWithin`` on the geography column), plus the place's own properties even if they
+      sit outside the radius. Results carry a ``distance`` annotation and are nearest first.
+    * A broad match (state or country only): every property in the matching locations,
+      alphabetically, with no distance.
+    """
     if location is None:
         return public_properties().none()
-    return public_properties().filter(location=location).order_by("title")
+
+    if location.rank == RANK_BROAD:
+        locations = Location.objects.filter(is_active=True).filter(_matches(text.strip()))
+        return public_properties().filter(location__in=locations).order_by("title")
+
+    origin = location.point
+    if origin is None:  # place has no coordinates, so only exact membership is possible
+        return public_properties().filter(location=location).order_by("title")
+
+    return (
+        public_properties()
+        .filter(Q(location=location) | Q(point__dwithin=(origin, D(km=radius_km))))
+        .annotate(distance=Distance("point", origin))
+        .order_by(F("distance").asc(nulls_last=True), "title")
+    )

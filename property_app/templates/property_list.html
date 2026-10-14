@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}{% if location %}Stays in {{ location.city }}{% else %}Browse stays{% endif %} - BD Stays{% endblock %}
+{% block title %}{% if radius_search %}Stays in {{ location.city }}{% elif location %}Stays in {{ form.cleaned_data.location }}{% else %}Browse stays{% endif %} - BD Stays{% endblock %}
 
 {% block content %}
 <section class="listing-header">
   <div class="container">
-    {% include "partials/search_form.html" with css_class="search-form--compact" %}
+    {% include "partials/search_form.html" with css_class="search-form--compact" show_radius=True %}
   </div>
 </section>
 
@@ -13,17 +13,22 @@
   <div class="container">
     {% if form.is_bound and form.is_valid %}
       <h1 class="listing__title">
-        {% if location %}Stays in {{ location.city }}{% else %}No stays found{% endif %}
+        {% if radius_search %}Stays in {{ location.city }}
+        {% elif location %}Stays in {{ form.cleaned_data.location }}
+        {% else %}No stays found{% endif %}
       </h1>
     {% elif not form.is_bound %}
       <h1 class="listing__title">All stays</h1>
     {% endif %}
 
     {% if properties %}
-      <p class="listing__count">{{ properties|length }} propert{{ properties|length|pluralize:"y,ies" }}</p>
+      <p class="listing__count">
+        {{ properties|length }} propert{{ properties|length|pluralize:"y,ies" }}
+        {% if radius_search %}within {{ radius }} km of {{ location.city }}, nearest first{% endif %}
+      </p>
       <div class="card-grid">
         {% for property in properties %}
-          {% include "partials/property_card.html" %}
+          {% include "partials/property_card.html" with origin=location.city %}
         {% endfor %}
       </div>
     {% elif form.is_valid %}

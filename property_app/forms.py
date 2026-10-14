@@ -1,5 +1,7 @@
 from django import forms
 
+from .search import DEFAULT_RADIUS_KM, RADIUS_CHOICES_KM
+
 
 class PropertySearchForm(forms.Form):
     location = forms.CharField(
@@ -22,3 +24,13 @@ class PropertySearchForm(forms.Form):
         if not any(char.isalpha() for char in location):
             raise forms.ValidationError("Enter a place name, e.g. Sylhet or Cox's Bazar.")
         return location
+
+    radius = forms.ChoiceField(
+        label="Search radius",
+        required=False,
+        choices=[(km, f"Within {km} km") for km in RADIUS_CHOICES_KM],
+        initial=DEFAULT_RADIUS_KM,
+    )
+
+    def clean_radius(self):
+        return int(self.cleaned_data.get("radius") or DEFAULT_RADIUS_KM)
