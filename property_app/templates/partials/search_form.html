@@ -1,0 +1,10 @@
+{% load property_tags %}
+<form class="search-form {{ css_class }}" method="get" action="{% url 'property_app:property_list' %}">
+  <label class="sr-only" for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
+  {{ form.location }}
+  {% location_datalist %}
+  <button class="btn search-form__submit" type="submit">Search</button>
+</form>
+{% if form.location.errors %}
+  <p class="form-error" role="alert">{{ form.location.errors.0 }}</p>
+{% endif %}

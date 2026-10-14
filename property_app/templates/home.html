@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load property_tags static %}
+{% load static %}
 
 {% block content %}
 <section class="hero">
@@ -7,12 +7,7 @@
     <h1 class="hero__title">Find your perfect getaway in Bangladesh</h1>
     <p class="hero__subtitle">Beach cottages, hill retreats, tea estate bungalows and more.</p>
 
-    <form class="search-form" method="get" action="{% url 'property_app:property_list' %}">
-      <label class="sr-only" for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
-      {{ form.location }}
-      {% location_datalist %}
-      <button class="btn search-form__submit" type="submit">Search</button>
-    </form>
+    {% include "partials/search_form.html" %}
   </div>
 </section>
 
