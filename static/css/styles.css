@@ -457,3 +457,30 @@ a.pagination__link:hover {
   color: var(--color-muted);
   font-size: 0.9rem;
 }
+
+/* ==========================================================================
+   Suggestion chips (empty search results)
+   ========================================================================== */
+.listing__suggest-title {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.chip {
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}

@@ -46,6 +46,8 @@ def property_list(request):
         "page_obj": page_obj,
         "page_range": paginator.get_elided_page_range(page_obj.number, on_each_side=2, on_ends=1),
         "querystring": params.urlencode(),
+        # only needed on a dead end, so skip the query when there are results
+        "suggested_locations": [] if page_obj else popular_locations(6),
         # a specific place (not just a state/country) gets distances and a radius
         "radius_search": location is not None and location.rank != RANK_BROAD,
     }

@@ -32,8 +32,18 @@
         {% endfor %}
       </div>
       {% include "partials/pagination.html" %}
-    {% elif form.is_valid %}
-      <p class="empty-state">We couldn't find any stays matching &ldquo;{{ form.cleaned_data.location }}&rdquo;.</p>
+    {% else %}
+      {% if form.is_valid %}
+        <p class="empty-state">We couldn't find any stays matching &ldquo;{{ form.cleaned_data.location }}&rdquo;.</p>
+      {% endif %}
+      {% if suggested_locations %}
+        <h2 class="section__title listing__suggest-title">Try a popular destination</h2>
+        <div class="chip-list">
+          {% for suggestion in suggested_locations %}
+            <a class="chip" href="?location={{ suggestion.name|urlencode }}">{{ suggestion.city }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
     {% endif %}
   </div>
 </section>
