@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load property_tags %}
+{% load property_tags static %}
 
 {% block content %}
 <section class="hero">
@@ -15,6 +15,27 @@
     </form>
   </div>
 </section>
+
+{% if popular_locations %}
+<section class="section">
+  <div class="container">
+    <h2 class="section__title">Popular destinations</h2>
+    <div class="destination-grid">
+      {% for location in popular_locations %}
+        <a class="destination" href="{% url 'property_app:property_list' %}?location={{ location.name|urlencode }}">
+          {% if location.cover %}
+            <img src="{% get_media_prefix %}{{ location.cover }}" alt="" loading="lazy">
+          {% endif %}
+          <span class="destination__label">
+            <strong>{{ location.city }}</strong>
+            <small>{{ location.property_count }} stay{{ location.property_count|pluralize }}</small>
+          </span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
 
 {% if featured_properties %}
 <section class="section">

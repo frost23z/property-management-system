@@ -314,3 +314,47 @@ select:focus {
   color: var(--color-muted);
   font-size: 0.9rem;
 }
+
+/* ==========================================================================
+   Home: popular destinations
+   ========================================================================== */
+.destination-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.destination {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+}
+
+.destination img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.destination:hover img {
+  transform: scale(1.05);
+}
+
+.destination__label {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem 0.75rem;
+  background: linear-gradient(transparent, rgb(0 0 0 / 70%));
+}
+
+.destination__label small {
+  opacity: 0.9;
+}
