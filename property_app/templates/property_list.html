@@ -21,16 +21,17 @@
       <h1 class="listing__title">All stays</h1>
     {% endif %}
 
-    {% if properties %}
+    {% if page_obj %}
       <p class="listing__count">
-        {{ properties|length }} propert{{ properties|length|pluralize:"y,ies" }}
+        {{ page_obj.paginator.count }} propert{{ page_obj.paginator.count|pluralize:"y,ies" }}
         {% if radius_search %}within {{ radius }} km of {{ location.city }}, nearest first{% endif %}
       </p>
       <div class="card-grid">
-        {% for property in properties %}
+        {% for property in page_obj %}
           {% include "partials/property_card.html" with origin=location.city %}
         {% endfor %}
       </div>
+      {% include "partials/pagination.html" %}
     {% elif form.is_valid %}
       <p class="empty-state">We couldn't find any stays matching &ldquo;{{ form.cleaned_data.location }}&rdquo;.</p>
     {% endif %}

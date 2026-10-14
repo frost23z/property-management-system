@@ -1,8 +1,11 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from .forms import PropertySearchForm
 from .search import DEFAULT_RADIUS_KM, RANK_BROAD, resolve_location, search_properties
 from .selectors import popular_locations, public_properties
+
+PAGE_SIZE = 12
 
 
 def home(request):
@@ -30,12 +33,20 @@ def property_list(request):
     else:
         properties = public_properties().none()
 
+    paginator = Paginator(properties, PAGE_SIZE)
+    page_obj = paginator.get_page(request.GET.get("page"))  # bad page numbers fall back safely
+    # keep the search in the page links, but let each link set its own page number
+    params = request.GET.copy()
+    params.pop("page", None)
+
     context = {
         "form": form,
         "location": location,
         "radius": radius,
+        "page_obj": page_obj,
+        "page_range": paginator.get_elided_page_range(page_obj.number, on_each_side=2, on_ends=1),
+        "querystring": params.urlencode(),
         # a specific place (not just a state/country) gets distances and a radius
         "radius_search": location is not None and location.rank != RANK_BROAD,
-        "properties": properties,
     }
     return render(request, "property_list.html", context)

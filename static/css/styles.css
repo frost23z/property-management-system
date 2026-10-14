@@ -409,3 +409,51 @@ select:focus {
   color: var(--color-muted);
   text-align: center;
 }
+
+/* ==========================================================================
+   Pagination
+   ========================================================================== */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 2rem;
+}
+
+.pagination__link,
+.pagination__gap {
+  min-width: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.pagination__link {
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+a.pagination__link:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.pagination__link.is-current {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination__gap {
+  color: var(--color-muted);
+}
+
+.pagination__summary {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
