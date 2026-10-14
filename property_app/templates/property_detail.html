@@ -71,6 +71,35 @@
           </section>
         {% endif %}
       {% endwith %}
+
+      {% if nearby_stays or nearby_locations %}
+        <section class="detail__section">
+          <h2>Nearby places</h2>
+
+          {% if nearby_locations %}
+            <h3 class="nearby__heading">Destinations within {{ nearby_places_km }} km</h3>
+            <ul class="nearby__places">
+              {% for place in nearby_locations %}
+                <li>
+                  <a class="nearby__place" href="{% url 'property_app:property_list' %}?location={{ place.city|urlencode }}">
+                    {{ place.city }}
+                    <span>{{ place.distance.km|floatformat:0 }} km away</span>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if nearby_stays %}
+            <h3 class="nearby__heading">More stays within {{ nearby_stays_km }} km</h3>
+            <div class="card-grid nearby__stays">
+              {% for nearby in nearby_stays %}
+                {% include "partials/property_card.html" with property=nearby origin=property.title %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </section>
+      {% endif %}
     </div>
 
     <aside class="detail__aside">

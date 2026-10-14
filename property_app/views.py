@@ -6,7 +6,11 @@ from django.shortcuts import get_object_or_404, render
 from .forms import PropertySearchForm
 from .search import (
     DEFAULT_RADIUS_KM,
+    NEARBY_PLACES_KM,
+    NEARBY_STAYS_KM,
     RANK_BROAD,
+    nearby_locations,
+    nearby_properties,
     resolve_location,
     search_properties,
     sort_properties,
@@ -71,4 +75,11 @@ def property_detail(request, slug):
         .annotate(distance_to_city=Distance("point", F("location__point")))
     )
     stay = get_object_or_404(stays, slug=slug)
-    return render(request, "property_detail.html", {"property": stay})
+    context = {
+        "property": stay,
+        "nearby_stays": nearby_properties(stay),
+        "nearby_locations": nearby_locations(stay),
+        "nearby_stays_km": NEARBY_STAYS_KM,
+        "nearby_places_km": NEARBY_PLACES_KM,
+    }
+    return render(request, "property_detail.html", context)

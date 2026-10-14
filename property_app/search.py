@@ -100,3 +100,51 @@ def search_properties(location, text="", radius_km=DEFAULT_RADIUS_KM):
 def sort_properties(properties, sort=DEFAULT_SORT):
     ordering = _SORT_ORDERINGS.get(sort)
     return properties.order_by(*ordering) if ordering else properties
+
+
+NEARBY_STAYS_KM = 15
+NEARBY_PLACES_KM = 40
+
+
+def circle_around(point, radius_km):
+    """A true-radius circle (as a 4326 polygon) around a point.
+
+    Buffering in degrees would give an oval, because a degree of longitude is shorter than a
+    degree of latitude. So the point is moved into its UTM zone (metres), buffered there, and
+    moved back.
+    """
+    zone = int((point.x + 180) // 6) + 1
+    utm_srid = (32600 if point.y >= 0 else 32700) + zone
+    circle = point.transform(utm_srid, clone=True).buffer(radius_km * 1000)
+    circle.transform(4326)
+    return circle
+
+
+def nearby_properties(stay, radius_km=NEARBY_STAYS_KM, limit=4):
+    """Other stays within ``radius_km`` of this one (PostGIS DWithin), nearest first."""
+    if stay.point is None:
+        return public_properties().none()
+    return (
+        public_properties()
+        .filter(point__dwithin=(stay.point, D(km=radius_km)))
+        .exclude(pk=stay.pk)
+        .annotate(distance=Distance("point", stay.point))
+        .order_by("distance", "title")[:limit]
+    )
+
+
+def nearby_locations(stay, radius_km=NEARBY_PLACES_KM, limit=5):
+    """Other destinations whose centre falls inside a circle around this stay (Intersects).
+
+    The stay's own location is left out. Results are nearest first and carry a ``distance``.
+    """
+    if stay.point is None:
+        return Location.objects.none()
+    return (
+        Location.objects.filter(
+            is_active=True, point__intersects=circle_around(stay.point, radius_km)
+        )
+        .exclude(pk=stay.location_id)
+        .annotate(distance=Distance("point", stay.point))
+        .order_by("distance")[:limit]
+    )
