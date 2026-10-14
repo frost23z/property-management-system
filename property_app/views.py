@@ -2,7 +2,13 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from .forms import PropertySearchForm
-from .search import DEFAULT_RADIUS_KM, RANK_BROAD, resolve_location, search_properties
+from .search import (
+    DEFAULT_RADIUS_KM,
+    RANK_BROAD,
+    resolve_location,
+    search_properties,
+    sort_properties,
+)
 from .selectors import popular_locations, public_properties
 
 PAGE_SIZE = 12
@@ -30,6 +36,7 @@ def property_list(request):
         location = resolve_location(form.cleaned_data["location"])
         radius = form.cleaned_data["radius"]
         properties = search_properties(location, form.cleaned_data["location"], radius)
+        properties = sort_properties(properties, form.cleaned_data["sort"])
     else:
         properties = public_properties().none()
 

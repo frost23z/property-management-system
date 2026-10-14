@@ -382,8 +382,8 @@ select:focus {
 }
 
 .search-form--compact select {
-  flex: 0 0 150px;
-  width: 150px;
+  flex: 0 0 auto;
+  width: auto;
 }
 
 .form-error {

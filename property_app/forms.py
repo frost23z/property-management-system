@@ -1,6 +1,6 @@
 from django import forms
 
-from .search import DEFAULT_RADIUS_KM, RADIUS_CHOICES_KM
+from .search import DEFAULT_RADIUS_KM, DEFAULT_SORT, RADIUS_CHOICES_KM, SORT_CHOICES
 
 
 class PropertySearchForm(forms.Form):
@@ -34,3 +34,13 @@ class PropertySearchForm(forms.Form):
 
     def clean_radius(self):
         return int(self.cleaned_data.get("radius") or DEFAULT_RADIUS_KM)
+
+    sort = forms.ChoiceField(
+        label="Sort by",
+        required=False,
+        choices=SORT_CHOICES,
+        initial=DEFAULT_SORT,
+    )
+
+    def clean_sort(self):
+        return self.cleaned_data.get("sort") or DEFAULT_SORT

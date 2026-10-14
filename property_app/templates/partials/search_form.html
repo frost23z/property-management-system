@@ -6,6 +6,8 @@
   {% if show_radius %}
     <label class="sr-only" for="{{ form.radius.id_for_label }}">{{ form.radius.label }}</label>
     {{ form.radius }}
+    <label class="sr-only" for="{{ form.sort.id_for_label }}">{{ form.sort.label }}</label>
+    {{ form.sort }}
   {% endif %}
   <button class="btn search-form__submit" type="submit">Search</button>
 </form>
@@ -13,5 +15,8 @@
   <p class="form-error" role="alert">{{ error }}</p>
 {% endfor %}
 {% for error in form.radius.errors %}
+  <p class="form-error" role="alert">{{ error }}</p>
+{% endfor %}
+{% for error in form.sort.errors %}
   <p class="form-error" role="alert">{{ error }}</p>
 {% endfor %}

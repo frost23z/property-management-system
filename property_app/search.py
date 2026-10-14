@@ -15,6 +15,21 @@ RANK_BROAD = 3  # only the state, country or full name contains it ("Bangladesh"
 RADIUS_CHOICES_KM = (5, 10, 25, 50, 100)
 DEFAULT_RADIUS_KM = 25
 
+# "nearest" keeps the order search_properties() already chose (distance, or title for
+# searches that have no distance); the others re-order the results.
+SORT_CHOICES = (
+    ("nearest", "Nearest first"),
+    ("price_asc", "Price: low to high"),
+    ("price_desc", "Price: high to low"),
+    ("bedrooms", "Most bedrooms"),
+)
+DEFAULT_SORT = "nearest"
+_SORT_ORDERINGS = {
+    "price_asc": ("price", "title"),
+    "price_desc": ("-price", "title"),
+    "bedrooms": ("-bedrooms", "title"),
+}
+
 
 def _matches(text):
     return (
@@ -80,3 +95,8 @@ def search_properties(location, text="", radius_km=DEFAULT_RADIUS_KM):
         .annotate(distance=Distance("point", origin))
         .order_by(F("distance").asc(nulls_last=True), "title")
     )
+
+
+def sort_properties(properties, sort=DEFAULT_SORT):
+    ordering = _SORT_ORDERINGS.get(sort)
+    return properties.order_by(*ordering) if ordering else properties
