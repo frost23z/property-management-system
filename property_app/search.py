@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.measure import D
@@ -8,6 +10,8 @@ from pgvector.django import CosineDistance
 from . import embeddings
 from .models import Location
 from .selectors import public_properties
+
+logger = logging.getLogger(__name__)
 
 # How a location matched the text a visitor typed (lower is a better match).
 RANK_EXACT = 0  # whole name or city equals the text
@@ -92,6 +96,29 @@ def semantic_locations(text, limit=5, max_distance=None):
         .filter(semantic_distance__lte=max_distance)
         .order_by("semantic_distance")[:limit]
     )
+
+
+def find_location(text):
+    """Resolve what a visitor typed to a Location: by text first, then by meaning.
+
+    A plain text match ("Sylhet", "cox") always wins. Only when nothing matches does the text
+    get embedded and compared against the stored location vectors, so a misspelling or a
+    different wording ("Coxs Bazaar") still lands on the right place. The semantic match comes
+    back with ``rank == RANK_SEMANTIC`` and a ``semantic_distance``; the caller then runs the
+    usual PostGIS radius search around it, so the final ranking fuses both signals: meaning
+    picks the place, geography orders the stays.
+    """
+    location = resolve_location(text)
+    if location is not None:
+        return location
+    try:
+        location = next(iter(semantic_locations(text, limit=1)), None)
+    except Exception:  # model missing/offline must not turn a no-match into a server error
+        logger.exception("Semantic location search failed for %r", text)
+        return None
+    if location is not None:
+        location.rank = RANK_SEMANTIC
+    return location
 
 
 def search_properties(location, text="", radius_km=DEFAULT_RADIUS_KM):

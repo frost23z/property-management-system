@@ -419,6 +419,15 @@ select:focus {
   color: var(--color-muted);
 }
 
+.listing__note {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.9rem;
+  border-left: 3px solid var(--color-accent);
+  border-radius: 4px;
+  background: var(--color-bg-soft);
+  color: var(--color-text);
+}
+
 .empty-state {
   padding: 2rem;
   border: 1px dashed var(--color-border);

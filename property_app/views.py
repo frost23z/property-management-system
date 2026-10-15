@@ -9,9 +9,10 @@ from .search import (
     NEARBY_PLACES_KM,
     NEARBY_STAYS_KM,
     RANK_BROAD,
+    RANK_SEMANTIC,
+    find_location,
     nearby_locations,
     nearby_properties,
-    resolve_location,
     search_properties,
     sort_properties,
 )
@@ -39,7 +40,7 @@ def property_list(request):
     if not form.is_bound:
         properties = public_properties().order_by("title")
     elif form.is_valid():
-        location = resolve_location(form.cleaned_data["location"])
+        location = find_location(form.cleaned_data["location"])
         radius = form.cleaned_data["radius"]
         properties = search_properties(location, form.cleaned_data["location"], radius)
         properties = sort_properties(properties, form.cleaned_data["sort"])
@@ -63,6 +64,8 @@ def property_list(request):
         "suggested_locations": [] if page_obj else popular_locations(6),
         # a specific place (not just a state/country) gets distances and a radius
         "radius_search": location is not None and location.rank != RANK_BROAD,
+        # nothing matched the text, so this place was picked because its name is similar
+        "semantic_match": location is not None and location.rank == RANK_SEMANTIC,
     }
     return render(request, "property_list.html", context)
 

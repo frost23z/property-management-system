@@ -17,6 +17,12 @@
         {% elif location %}Stays in {{ form.cleaned_data.location }}
         {% else %}No stays found{% endif %}
       </h1>
+      {% if semantic_match %}
+        <p class="listing__note">
+          We couldn't find &ldquo;{{ form.cleaned_data.location }}&rdquo;, so we're showing the
+          closest match: <strong>{{ location.city }}</strong>.
+        </p>
+      {% endif %}
     {% elif not form.is_bound %}
       <h1 class="listing__title">All stays</h1>
     {% endif %}
