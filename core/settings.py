@@ -147,3 +147,10 @@ MAILERS = {
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+# Semantic search
+# FastEmbed runs the same all-MiniLM-L6-v2 model as sentence-transformers, but through ONNX
+# Runtime, so it needs no PyTorch. The model (~90 MB) is downloaded on first use.
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+EMBEDDING_DIMENSIONS = 384  # output size of all-MiniLM-L6-v2; must match the vector columns
