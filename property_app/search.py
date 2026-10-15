@@ -48,6 +48,26 @@ def _matches(text):
     )
 
 
+def _rank_expression(text):
+    return Case(
+        When(Q(name__iexact=text) | Q(city__iexact=text), then=Value(RANK_EXACT)),
+        When(Q(city__istartswith=text) | Q(name__istartswith=text), then=Value(RANK_PREFIX)),
+        When(city__icontains=text, then=Value(RANK_CITY)),
+        default=Value(RANK_BROAD),
+        output_field=IntegerField(),
+    )
+
+
+def _text_matches(text):
+    """Active locations matching the text, best match first, each with a ``rank``."""
+    return (
+        Location.objects.filter(is_active=True)
+        .filter(_matches(text))
+        .annotate(rank=_rank_expression(text))
+        .order_by("rank", Length("city"), "name")
+    )
+
+
 def resolve_location(text):
     """Return the active Location that best matches free text, or None.
 
@@ -58,23 +78,7 @@ def resolve_location(text):
     text = (text or "").strip()
     if not text:
         return None
-    return (
-        Location.objects.filter(is_active=True)
-        .filter(_matches(text))
-        .annotate(
-            rank=Case(
-                When(Q(name__iexact=text) | Q(city__iexact=text), then=Value(RANK_EXACT)),
-                When(
-                    Q(city__istartswith=text) | Q(name__istartswith=text), then=Value(RANK_PREFIX)
-                ),
-                When(city__icontains=text, then=Value(RANK_CITY)),
-                default=Value(RANK_BROAD),
-                output_field=IntegerField(),
-            )
-        )
-        .order_by("rank", Length("city"), "name")
-        .first()
-    )
+    return _text_matches(text).first()
 
 
 def semantic_locations(text, limit=5, max_distance=None):
@@ -119,6 +123,38 @@ def find_location(text):
     if location is not None:
         location.rank = RANK_SEMANTIC
     return location
+
+
+def autocomplete_locations(text, limit=8):
+    """Suggestions for a search-as-you-type box: text matches first, then semantic ones.
+
+    Typed matches (prefix / substring) come first because they are what the visitor is most
+    likely spelling out. If that leaves room, the rest of the list is filled with locations
+    whose names are close in meaning (pgvector), so "Coxs Bazar" or a misspelling still
+    suggests something. Every result carries ``match`` ("text" or "semantic") and, for
+    semantic ones, ``semantic_distance``.
+    """
+    text = (text or "").strip()
+    if not text:
+        return []
+    results = list(_text_matches(text)[:limit])
+    for location in results:
+        location.match = "text"
+        location.semantic_distance = None
+    if len(results) >= limit:
+        return results
+
+    try:
+        similar = semantic_locations(text, limit=limit)
+        seen = {location.pk for location in results}
+        for location in similar:
+            if location.pk in seen or len(results) >= limit:
+                continue
+            location.match = "semantic"
+            results.append(location)
+    except Exception:  # keep autocomplete usable if the model can't load
+        logger.exception("Semantic autocomplete failed for %r", text)
+    return results
 
 
 def search_properties(location, text="", radius_km=DEFAULT_RADIUS_KM):
