@@ -10,6 +10,11 @@ class Location(models.Model):
     state = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=100)
     address = models.TextField(blank=True)
+    description = models.TextField(
+        blank=True,
+        help_text="What the place is like (scenery, activities, atmosphere). "
+        "Used together with the name for semantic search.",
+    )
     point = models.PointField(geography=True, srid=4326, null=True, blank=True)
     boundary = models.MultiPolygonField(srid=4326, null=True, blank=True)
     embedding = VectorField(dimensions=settings.EMBEDDING_DIMENSIONS, null=True, blank=True)
@@ -31,6 +36,11 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def embedding_text(self):
+        """The text that gets embedded: the name plus what the place is like."""
+        return f"{self.name}. {self.description}".strip() if self.description else self.name
 
 
 class Amenity(models.Model):

@@ -61,22 +61,36 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------ locations
     def import_locations(self, df):
-        existing = set(Location.objects.values_list("slug", flat=True))
-        rows = [
-            Location(
-                name=r.name,
-                slug=r.slug,
-                country=r.country,
-                state=r.state,
-                city=r.city,
-                address=r.address,
-                point=Point(float(r.longitude), float(r.latitude), srid=4326),  # lon first
-            )
-            for r in df.itertuples()
-            if r.slug not in existing
-        ]
+        existing = {loc.slug: loc for loc in Location.objects.all()}
+        has_description = "description" in df.columns
+        rows, changed = [], []
+        for r in df.itertuples():
+            description = str(r.description).strip() if has_description else ""
+            loc = existing.get(r.slug)
+            if loc is None:
+                rows.append(
+                    Location(
+                        name=r.name,
+                        slug=r.slug,
+                        country=r.country,
+                        state=r.state,
+                        city=r.city,
+                        address=r.address,
+                        description=description,
+                        point=Point(float(r.longitude), float(r.latitude), srid=4326),  # lon first
+                    )
+                )
+            elif description and loc.description != description:
+                loc.description = description
+                loc.embedding = None
+                changed.append(loc)
         Location.objects.bulk_create(rows)
-        self.stdout.write(self.style.SUCCESS(f"Locations created: {len(rows)}"))
+        Location.objects.bulk_update(changed, ["description", "embedding"])
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Locations created: {len(rows)}, descriptions updated: {len(changed)}"
+            )
+        )
 
     # ----------------------------------------------------------------- properties
     def import_properties(self, df):

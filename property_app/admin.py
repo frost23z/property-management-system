@@ -13,6 +13,11 @@ class LocationAdmin(GISModelAdmin):
     prepopulated_fields = {"slug": ("name",)}  # noqa: RUF012
     exclude = ("embedding",)
 
+    def save_model(self, request, obj, form, change):
+        if change and {"name", "description"} & set(form.changed_data):
+            obj.embedding = None
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Amenity)
 class AmenityAdmin(admin.ModelAdmin):

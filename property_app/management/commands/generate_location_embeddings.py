@@ -1,4 +1,4 @@
-"""Embed location names with FastEmbed and store the vectors in pgvector.
+"""Embed location names and descriptions with FastEmbed and store the vectors in pgvector.
 
 Usage:
     python manage.py generate_location_embeddings            # only locations without a vector
@@ -15,7 +15,7 @@ from property_app.models import Location
 
 
 class Command(BaseCommand):
-    help = "Generate name embeddings for locations (used by semantic location search)"
+    help = "Generate embeddings from each location's name and description (semantic search)"
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -36,7 +36,7 @@ class Command(BaseCommand):
         size = max(opts["batch_size"], 1)
         for start in range(0, len(locations), size):
             batch = locations[start : start + size]
-            vectors = embeddings.embed_texts([location.name for location in batch])
+            vectors = embeddings.embed_texts([location.embedding_text for location in batch])
             for location, vector in zip(batch, vectors):
                 location.embedding = vector
             Location.objects.bulk_update(batch, ["embedding"])
