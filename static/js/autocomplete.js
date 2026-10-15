@@ -34,13 +34,22 @@ document.querySelectorAll("[data-autocomplete]").forEach((box) => {
       const item = document.createElement("li");
       item.setAttribute("role", "option");
       item.className = "autocomplete__item";
-      item.textContent = result.name;
-      if (result.match === "semantic") {
-        const hint = document.createElement("span");
-        hint.className = "autocomplete__hint";
-        hint.textContent = "similar";
-        item.append(hint);
-      }
+      item.dataset.name = result.name;
+
+      const name = document.createElement("span");
+      name.className = "autocomplete__name";
+      name.textContent = result.name;
+
+      // tell the visitor why each suggestion is here: typed text vs similar meaning
+      const tag = document.createElement("span");
+      const semantic = result.match === "semantic";
+      tag.className = `autocomplete__tag autocomplete__tag--${semantic ? "semantic" : "text"}`;
+      tag.textContent = semantic ? "Similar" : "Name match";
+      tag.title = semantic
+        ? "Suggested because its name and description are close in meaning"
+        : "Suggested because its name contains what you typed";
+
+      item.append(name, tag);
       // mousedown fires before the input loses focus, so the click is not swallowed
       item.addEventListener("mousedown", (event) => {
         event.preventDefault();
@@ -59,7 +68,7 @@ document.querySelectorAll("[data-autocomplete]").forEach((box) => {
     if (controller) controller.abort(); // drop the answer to an older keystroke
     controller = new AbortController();
     try {
-      const url = `${box.dataset.url}?q=${encodeURIComponent(query)}&limit=6`;
+      const url = `${box.dataset.url}?q=${encodeURIComponent(query)}&limit=5`;
       const response = await fetch(url, { signal: controller.signal });
       if (!response.ok) return close();
       render((await response.json()).results);
@@ -83,7 +92,7 @@ document.querySelectorAll("[data-autocomplete]").forEach((box) => {
       highlight((active + step + items.length) % items.length);
     } else if (event.key === "Enter" && active >= 0) {
       event.preventDefault();
-      choose(items[active].firstChild.textContent);
+      choose(items[active].dataset.name);
     } else if (event.key === "Escape") {
       close();
     }

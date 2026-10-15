@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 from .models import Location
 
-AUTOCOMPLETE_DEFAULT_LIMIT = 8
-AUTOCOMPLETE_MAX_LIMIT = 20
+AUTOCOMPLETE_DEFAULT_LIMIT = 5
+AUTOCOMPLETE_MAX_LIMIT = 10
 
 
 class AutocompleteQuerySerializer(serializers.Serializer):

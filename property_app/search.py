@@ -125,36 +125,43 @@ def find_location(text):
     return location
 
 
-def autocomplete_locations(text, limit=8):
-    """Suggestions for a search-as-you-type box: text matches first, then semantic ones.
+def autocomplete_locations(text, limit=5):
+    """Suggestions for a search-as-you-type box, blending text and semantic matches.
 
-    Typed matches (prefix / substring) come first because they are what the visitor is most
-    likely spelling out. If that leaves room, the rest of the list is filled with locations
-    whose names are close in meaning (pgvector), so "Coxs Bazar" or a misspelling still
-    suggests something. Every result carries ``match`` ("text" or "semantic") and, for
-    semantic ones, ``semantic_distance``.
+    Both searches always run. Typed matches (prefix / substring of the name, city, state or
+    country) come first and get most of the slots; a few slots are reserved for locations whose
+    name and description are close in meaning (pgvector), so "beach" or a misspelling can still
+    surface a place that never contains those letters. If one side has fewer results than its
+    share, the other side uses the spare slots. Every result carries ``match`` ("text" or
+    "semantic") and ``semantic_distance`` (``None`` for text matches).
     """
     text = (text or "").strip()
     if not text:
         return []
-    results = list(_text_matches(text)[:limit])
-    for location in results:
-        location.match = "text"
-        location.semantic_distance = None
-    if len(results) >= limit:
-        return results
 
+    semantic_slots = max(1, limit // 3)
+    typed = list(_text_matches(text)[:limit])
+    typed_pks = {location.pk for location in typed}
     try:
-        similar = semantic_locations(text, limit=limit)
-        seen = {location.pk for location in results}
-        for location in similar:
-            if location.pk in seen or len(results) >= limit:
-                continue
-            location.match = "semantic"
-            results.append(location)
+        similar = [
+            location
+            for location in semantic_locations(text, limit=limit * 2)
+            if location.pk not in typed_pks
+        ]
     except Exception:  # keep autocomplete usable if the model can't load
         logger.exception("Semantic autocomplete failed for %r", text)
-    return results
+        similar = []
+
+    typed_share = max(limit - semantic_slots, limit - len(similar))
+    picked_typed = typed[:typed_share]
+    picked_similar = similar[: limit - len(picked_typed)]
+
+    for location in picked_typed:
+        location.match = "text"
+        location.semantic_distance = None
+    for location in picked_similar:
+        location.match = "semantic"
+    return picked_typed + picked_similar
 
 
 def search_properties(location, text="", radius_km=DEFAULT_RADIUS_KM):
