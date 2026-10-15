@@ -1,8 +1,11 @@
+from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.measure import D
 from django.db.models import Case, F, IntegerField, Q, Value, When
 from django.db.models.functions import Length
+from pgvector.django import CosineDistance
 
+from . import embeddings
 from .models import Location
 from .selectors import public_properties
 
@@ -11,6 +14,7 @@ RANK_EXACT = 0  # whole name or city equals the text
 RANK_PREFIX = 1  # city or name starts with the text
 RANK_CITY = 2  # city contains the text
 RANK_BROAD = 3  # only the state, country or full name contains it ("Bangladesh")
+RANK_SEMANTIC = 4  # no text match; chosen because its name is close in meaning (pgvector)
 
 RADIUS_CHOICES_KM = (5, 10, 25, 50, 100)
 DEFAULT_RADIUS_KM = 25
@@ -66,6 +70,27 @@ def resolve_location(text):
         )
         .order_by("rank", Length("city"), "name")
         .first()
+    )
+
+
+def semantic_locations(text, limit=5, max_distance=None):
+    """Active locations whose name embedding is close to the text, closest first.
+
+    The text is embedded with the same model used for the stored location names and compared
+    with pgvector's cosine distance (``<=>``), which the HNSW index on ``Location.embedding``
+    speeds up. Each result carries a ``semantic_distance`` annotation (0 is identical); anything
+    farther than ``max_distance`` (default ``settings.SEMANTIC_MAX_DISTANCE``) is dropped.
+    """
+    text = (text or "").strip()
+    if not text:
+        return Location.objects.none()
+    if max_distance is None:
+        max_distance = settings.SEMANTIC_MAX_DISTANCE
+    return (
+        Location.objects.filter(is_active=True, embedding__isnull=False)
+        .annotate(semantic_distance=CosineDistance("embedding", embeddings.embed_text(text)))
+        .filter(semantic_distance__lte=max_distance)
+        .order_by("semantic_distance")[:limit]
     )
 
 

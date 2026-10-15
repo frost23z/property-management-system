@@ -154,3 +154,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Runtime, so it needs no PyTorch. The model (~90 MB) is downloaded on first use.
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 EMBEDDING_DIMENSIONS = 384  # output size of all-MiniLM-L6-v2; must match the vector columns
+# Largest cosine distance (0 = identical, 2 = opposite) at which a location still counts as a
+# semantic match for what the visitor typed. Lower is stricter.
+SEMANTIC_MAX_DISTANCE = float(os.getenv("SEMANTIC_MAX_DISTANCE", "0.5"))
