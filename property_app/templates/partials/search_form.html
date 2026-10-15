@@ -1,8 +1,9 @@
-{% load property_tags %}
 <form class="search-form {{ css_class }}" method="get" action="{% url 'property_app:property_list' %}">
   <label class="sr-only" for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
-  {{ form.location }}
-  {% location_datalist %}
+  <div class="autocomplete" data-autocomplete data-url="{% url 'property_app:location_autocomplete' %}">
+    {{ form.location }}
+    <ul class="autocomplete__list" data-autocomplete-list role="listbox" hidden></ul>
+  </div>
   {% if show_radius %}
     <label class="sr-only" for="{{ form.radius.id_for_label }}">{{ form.radius.label }}</label>
     {{ form.radius }}
